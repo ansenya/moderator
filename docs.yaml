@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Moderator API
+  version: 1.0.0
+  description: API для проверки соответствия текста определенной категории.
+
+servers:
+  - url: https://api.freelance.ink/moderator
+
+paths:
+  /validate:
+    post:
+      summary: Проверка текста на соответствие категории
+      description: Проверяет, подходит ли данный текст под указанную категорию.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+            example:
+              topic: "графический дизайн"
+              text: "создам красивый дизайн проект для вашего сайта, приложения, чего угодно! помогу с seo, "
+      responses:
+        '200':
+          description: Успешный ответ с информацией о релевантности текста.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  relevant:
+                    type: boolean
+                    description: Показывает, соответствует ли текст теме.
+                  cause:
+                    type: string
+                example:
+                  relevant: true
+        '400':
+          description: Ошибка запроса, некорректное тело.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "cannot read body"
+        '500':
+          description: Ошибка на сервере при обработке запроса. Например, gpt прислал текст, который сервер не смог оценить (понять).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  relevant:
+                    type: string
+                example:
+                  message: "smth wrong happened while deciding"
+                  result: "0"
+components:
+  schemas:
+    ValidateRequest:
+      type: object
+      properties:
+        topic:
+          type: string
+          description: Категория для проверки соответствия.
+        text:
+          type: string
+          description: Описание, которое нужно проверить.
