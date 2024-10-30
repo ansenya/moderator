@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Moderator API
   version: 1.0.0
-  description: API для проверки соответствия текста определенной категории.
+  description: API for checking the relevance of text to a specific category.
 
 servers:
   - url: https://api.freelance.ink/moderator
@@ -10,8 +10,8 @@ servers:
 paths:
   /validate:
     post:
-      summary: Проверка текста на соответствие категории
-      description: Проверяет, подходит ли данный текст под указанную категорию.
+      summary: Check text relevance to category
+      description: Verifies whether the given text fits the specified category.
       requestBody:
         required: true
         content:
@@ -19,11 +19,11 @@ paths:
             schema:
               $ref: '#/components/schemas/ValidateRequest'
             example:
-              topic: "графический дизайн"
-              text: "создам красивый дизайн проект для вашего сайта, приложения, чего угодно! помогу с seo, "
+              topic: "graphic design"
+              text: "I will create a beautiful design project for your website, application, or anything else! I can help with SEO,"
       responses:
         '200':
-          description: Успешный ответ с информацией о релевантности текста.
+          description: Successful response with information on text relevance.
           content:
             application/json:
               schema:
@@ -31,13 +31,13 @@ paths:
                 properties:
                   relevant:
                     type: boolean
-                    description: Показывает, соответствует ли текст теме.
+                    description: Indicates whether the text is relevant to the topic.
                   cause:
                     type: string
                 example:
                   relevant: true
         '400':
-          description: Ошибка запроса, некорректное тело.
+          description: Bad request error due to invalid body.
           content:
             application/json:
               schema:
@@ -48,7 +48,7 @@ paths:
                 example:
                   message: "cannot read body"
         '500':
-          description: Ошибка на сервере при обработке запроса. Например, gpt прислал текст, который сервер не смог оценить (понять).
+          description: Server error during request processing. For example, the model returned text that the server could not evaluate (understand).
           content:
             application/json:
               schema:
@@ -59,7 +59,7 @@ paths:
                   relevant:
                     type: string
                 example:
-                  message: "smth wrong happened while deciding"
+                  message: "something went wrong while deciding"
                   result: "0"
 components:
   schemas:
@@ -68,7 +68,7 @@ components:
       properties:
         topic:
           type: string
-          description: Категория для проверки соответствия.
+          description: The category for relevance checking.
         text:
           type: string
-          description: Описание, которое нужно проверить.
+          description: The text that needs to be validated.
