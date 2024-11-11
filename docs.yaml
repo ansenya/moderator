@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Moderator API
+  title: Модератор API
   version: 1.0.0
-  description: API for checking the relevance of text to a specific category.
+  description: API для проверки релевантности текста определенной категории.
 
 servers:
   - url: https://api.freelance.ink/moderator
@@ -10,8 +10,8 @@ servers:
 paths:
   /validate:
     post:
-      summary: Check text relevance to category
-      description: Verifies whether the given text fits the specified category.
+      summary: Проверка релевантности текста категории
+      description: Проверяет, соответствует ли данный текст указанной категории. Если -1, то вообще не соответсвует. Если 0, то не соответсвует частично (не критично). Если 1, то все хорошо.
       requestBody:
         required: true
         content:
@@ -19,25 +19,28 @@ paths:
             schema:
               $ref: '#/components/schemas/ValidateRequest'
             example:
-              topic: "graphic design"
-              text: "I will create a beautiful design project for your website, application, or anything else! I can help with SEO,"
+              title: "Логотип, фирменный стиль, упаковка, нейминг"
+              price: 12000
+              description: "Разрабатываю логотипы, нейминг, фирменный стиль, брендбук, упаковку, сайты.Посмотреть прайс можно на моём сайте: https://merkulovadesign.ru/tarifi"
       responses:
         '200':
-          description: Successful response with information on text relevance.
+          description: Успешный ответ с информацией о релевантности текста.
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   relevant:
-                    type: boolean
-                    description: Indicates whether the text is relevant to the topic.
+                    type: integer
+                    description: Указывает, релевантен ли текст указанной теме.
+                    example: 0
                   cause:
                     type: string
                 example:
-                  relevant: true
+                  relevant: 0
+                  cause: "В описании есть ссылка на другой сайт."
         '400':
-          description: Bad request error due to invalid body.
+          description: Ошибка запроса из-за неверного тела запроса.
           content:
             application/json:
               schema:
@@ -46,9 +49,9 @@ paths:
                   message:
                     type: string
                 example:
-                  message: "cannot read body"
+                  message: "не удалось прочитать тело запроса"
         '500':
-          description: Server error during request processing. For example, the model returned text that the server could not evaluate (understand).
+          description: Ошибка сервера при обработке запроса. Например, модель вернула текст, который сервер не смог оценить (понять).
           content:
             application/json:
               schema:
@@ -59,16 +62,19 @@ paths:
                   relevant:
                     type: string
                 example:
-                  message: "something went wrong while deciding"
+                  message: "произошла ошибка при принятии решения"
                   result: "0"
 components:
   schemas:
     ValidateRequest:
       type: object
       properties:
-        topic:
+        title:
           type: string
-          description: The category for relevance checking.
-        text:
+          description: Заголовок услуги.
+        price:
           type: string
-          description: The text that needs to be validated.
+          description: Стоимость услуги.
+        description:
+          type: string
+          description: Текст, который нужно проверить.

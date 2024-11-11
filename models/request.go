@@ -1,6 +1,7 @@
 package models
 
 type Request struct {
-	Topic string `json:"topic"`
-	Text  string `json:"text"`
+	Title       string `json:"title"`
+	Price       int    `json:"price"`
+	Description string `json:"description"`
 }

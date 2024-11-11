@@ -11,24 +11,12 @@ import (
 	"os"
 )
 
-func Validate(requirements string, text string) (*models.GptResponse, *models.Error, error) {
+func Validate(messages []models.Message) (*models.GptResponse, *models.Error, error) {
 	url := "https://api.openai.com/v1/chat/completions"
-	messages := models.Message{
-		Role: "system",
-		Content: []models.Content{
-			{
-				Type: "text",
-				Text: requirements,
-			},
-			{
-				Type: "text",
-				Text: text,
-			},
-		},
-	}
+
 	request := models.GptRequest{
 		Model:            "gpt-4o",
-		Messages:         []models.Message{messages},
+		Messages:         messages,
 		Temperature:      1,
 		MaxTokens:        100,
 		TopP:             1,
