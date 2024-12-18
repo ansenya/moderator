@@ -17,9 +17,15 @@ import (
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.Default())
+
 	router.POST("/validate", validate)
+	router.GET("/ping", ping)
 
 	return router
+}
+
+func ping(c *gin.Context) {
+	c.JSON(200, "pong")
 }
 
 func validate(c *gin.Context) {
