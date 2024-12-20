@@ -10,8 +10,12 @@ RUN go build -o /build
 
 FROM alpine:latest
 
+RUN apk add curl
+
 COPY --from=builder /build /app/build
 
 WORKDIR /app
+
+EXPOSE 8080
 
 CMD ["/app/build"]
